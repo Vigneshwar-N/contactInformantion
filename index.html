@@ -708,6 +708,24 @@ document.addEventListener("DOMContentLoaded", function () {
   const hide = el => el && (el.style.display = "none");
   const show = el => el && (el.style.display = "");
 
+  function removeMandatory(fieldName) {
+  const index = zf_MandArray.indexOf(fieldName);
+  if (index > -1) zf_MandArray.splice(index, 1);
+}
+
+function addMandatory(fieldName) {
+  if (!zf_MandArray.includes(fieldName)) {
+    zf_MandArray.push(fieldName);
+  }
+}
+
+function resetSelect(name) {
+  const el = document.forms.form[name];
+  if (el) el.value = '-Select-';
+}
+
+
+
 
   function resetAll() {
     hide(inquiryTypeWrapper); 
@@ -734,31 +752,49 @@ document.addEventListener("DOMContentLoaded", function () {
   function handleTypeChange() {
     resetAll();
 
-    if (businessRadio.checked) {
-      hide(inquiryTypeWrapper);
-      hide(companyName);
-      hide(individualCheckbox.closest('.zf-tempFrmWrapper'));
-    }
+if (businessRadio.checked) {
+  hide(inquiryTypeWrapper);
 
-    if (othersRadio.checked) {
-      show(inquiryTypeWrapper); 
-      show(individualCheckbox.closest('.zf-tempFrmWrapper'));
-    }
+  removeMandatory("Radio1");
+}
+
+
+if (othersRadio.checked) {
+  show(inquiryTypeWrapper);
+
+  addMandatory("Radio1");
+}
+
   }
 
   /* ===== INDIVIDUAL CHECKBOX ===== */
   function handleIndividualChange() {
-    if (individualCheckbox.checked) {
-      hide(industry);
-      hide(companyName);
-      hide(businessType);
-      hide(businessTypeDetail);
-    } else {
-      show(industry);
-      show(companyName);
-      show(businessType);
-      show(businessTypeDetail);
-    }
+if (individualCheckbox.checked) {
+  hide(industry);
+  hide(companyName);
+  hide(businessType);
+  hide(businessTypeDetail);
+
+  resetSelect("Dropdown");
+  resetSelect("Dropdown2");
+  resetSelect("Dropdown3");
+
+  removeMandatory("Dropdown");
+  removeMandatory("Dropdown2");
+  removeMandatory("Dropdown3");
+}
+else {
+  show(industry);
+  show(companyName);
+  show(businessType);
+  show(businessTypeDetail);
+
+  addMandatory("Dropdown");
+  addMandatory("Dropdown2");
+  addMandatory("Dropdown3");
+}
+
+
   }
 
  

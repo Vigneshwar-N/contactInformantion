@@ -397,8 +397,16 @@ function zf_ValidateAndSubmit(){
 
 // Function to hide error message for a field
 function zf_HideErrorMsg(fieldName) {
+	// Try direct field name first (e.g., Dropdown1_error, Email_error)
+	var errorElement = document.getElementById(fieldName + "_error");
+	if(errorElement) {
+		errorElement.style.display = 'none';
+		return;
+	}
+	
+	// Fallback: use split approach for fields with underscores
 	var linkName = fieldName.split('_')[0];
-	var errorElement = document.getElementById(linkName + "_error");
+	errorElement = document.getElementById(linkName + "_error");
 	if(errorElement) {
 		errorElement.style.display = 'none';
 	}
@@ -411,7 +419,8 @@ function zf_IsFieldFilled(fieldObj) {
 	if(fieldObj.nodeName === 'OBJECT') {
 		return true;
 	} else if(fieldObj.nodeName === 'SELECT') {
-		return fieldObj.options[fieldObj.selectedIndex].value !== '-Select-';
+		var selectedValue = fieldObj.options[fieldObj.selectedIndex].value;
+		return selectedValue !== '-Select-' && selectedValue.trim() !== '';
 	} else if(fieldObj.type === 'checkbox' || fieldObj.type === 'radio') {
 		if(fieldObj.length !== undefined) {
 			// Multiple checkboxes/radios
@@ -431,48 +440,60 @@ function zf_IsFieldFilled(fieldObj) {
 
 // Attach event listeners to hide errors when fields are filled
 document.addEventListener("DOMContentLoaded", function() {
+	// Attach listeners to each mandatory field
 	for(var i = 0; i < zf_MandArray.length; i++) {
-		var fieldObj = document.forms.form[zf_MandArray[i]];
-		if(fieldObj) {
-			if(fieldObj.length !== undefined) {
-				// Multiple checkboxes/radios
-				for(var j = 0; j < fieldObj.length; j++) {
-					fieldObj[j].addEventListener("change", (function(fieldName) {
-						return function() {
-							if(zf_IsFieldFilled(document.forms.form[fieldName])) {
-								zf_HideErrorMsg(fieldName);
-							}
-						};
-					})(zf_MandArray[i]));
+		var fieldName = zf_MandArray[i];
+		attachFieldListener(fieldName);
+	}
+	
+	// Additional listeners for select fields (Dropdown1, Dropdown2, Dropdown3)
+	var selectFieldsToListen = ['Dropdown1', 'Dropdown2', 'Dropdown3'];
+	for(var s = 0; s < selectFieldsToListen.length; s++) {
+		var selectFieldName = selectFieldsToListen[s];
+		var selectField = document.forms.form[selectFieldName];
+		if(selectField) {
+			selectField.addEventListener("change", function(e) {
+				var fieldName = e.target.name;
+				if(e.target.options[e.target.selectedIndex].value !== '-Select-') {
+					zf_HideErrorMsg(fieldName + '_error');
 				}
-			} else {
-				// Single field
-				if(fieldObj.type === 'checkbox' || fieldObj.type === 'radio') {
-					fieldObj.addEventListener("change", (function(fieldName) {
-						return function() {
-							if(zf_IsFieldFilled(document.forms.form[fieldName])) {
-								zf_HideErrorMsg(fieldName);
-							}
-						};
-					})(zf_MandArray[i]));
-				} else if(fieldObj.nodeName === 'SELECT') {
-					fieldObj.addEventListener("change", (function(fieldName) {
-						return function() {
-							if(zf_IsFieldFilled(document.forms.form[fieldName])) {
-								zf_HideErrorMsg(fieldName);
-							}
-						};
-					})(zf_MandArray[i]));
-				} else {
-					fieldObj.addEventListener("input", (function(fieldName) {
-						return function() {
-							if(zf_IsFieldFilled(document.forms.form[fieldName])) {
-								zf_HideErrorMsg(fieldName);
-							}
-						};
-					})(zf_MandArray[i]));
-				}
+			});
+		}
+	}
+	
+	function attachFieldListener(fieldName) {
+		var fieldObj = document.forms.form[fieldName];
+		if(!fieldObj) return;
+		
+		if(fieldObj.length !== undefined) {
+			// Multiple checkboxes/radios (NodeList)
+			for(var j = 0; j < fieldObj.length; j++) {
+				fieldObj[j].addEventListener("change", function() {
+					checkAndHideError(fieldName);
+				});
 			}
+		} else {
+			// Single field
+			if(fieldObj.type === 'checkbox' || fieldObj.type === 'radio') {
+				fieldObj.addEventListener("change", function() {
+					checkAndHideError(fieldName);
+				});
+			} else if(fieldObj.nodeName === 'SELECT') {
+				fieldObj.addEventListener("change", function() {
+					checkAndHideError(fieldName);
+				});
+			} else {
+				fieldObj.addEventListener("input", function() {
+					checkAndHideError(fieldName);
+				});
+			}
+		}
+	}
+	
+	function checkAndHideError(fieldName) {
+		var fieldObj = document.forms.form[fieldName];
+		if(zf_IsFieldFilled(fieldObj)) {
+			zf_HideErrorMsg(fieldName);
 		}
 	}
 });
