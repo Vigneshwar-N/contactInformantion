@@ -843,4 +843,83 @@ else {
 });
 </script>
 
+<script>
+// Phone Number Validation - Only Numbers and Country-specific Max Length
+const countryPhoneLengths = {
+  '213': 9,   // Algeria
+  '1': 10,    // US/Canada
+  '44': 10,   // UK
+  '91': 10,   // India
+  '86': 11,   // China
+  '81': 10,   // Japan
+  '33': 9,    // France
+  '49': 11,   // Germany
+  '39': 10,   // Italy
+  '34': 9,    // Spain
+  '61': 9,    // Australia
+  '27': 9,    // South Africa
+  '55': 11,   // Brazil
+  '52': 10,   // Mexico
+  '82': 9,    // South Korea
+  '65': 8,    // Singapore
+  '60': 9,    // Malaysia
+  '66': 9,    // Thailand
+  '62': 10,   // Indonesia
+  '64': 9,    // New Zealand
+  '32': 9,    // Belgium
+  '31': 9,    // Netherlands
+  '41': 9,    // Switzerland
+  '43': 10,   // Austria
+  '46': 9,    // Sweden
+  '47': 8,    // Norway
+  '45': 8,    // Denmark
+  '358': 9,   // Finland
+  '48': 9,    // Poland
+  '36': 9,    // Hungary
+  '40': 10,   // Romania
+  '30': 10,   // Greece
+  '90': 10,   // Turkey
+  '972': 9,   // Israel
+  '971': 9,   // UAE
+  '966': 9,   // Saudi Arabia
+  '974': 8,   // Qatar
+  '56': 9,    // Chile
+  '54': 10,   // Argentina
+  '57': 10,   // Colombia
+  '51': 9     // Peru
+};
+
+const phoneInput = document.getElementById('international_PhoneNumber_countrycode');
+const countrySelect = document.getElementById('PhoneNumber_countrycode_select');
+
+// Allow only numbers in phone input
+phoneInput.addEventListener('input', function(e) {
+  // Remove any non-numeric characters
+  this.value = this.value.replace(/[^0-9]/g, '');
+  
+  // Enforce country-specific max length
+  const selectedCountry = countrySelect.value;
+  const maxLength = countryPhoneLengths[selectedCountry] || 15;
+  
+  if (this.value.length > maxLength) {
+    this.value = this.value.substring(0, maxLength);
+  }
+});
+
+// Update max length when country changes
+countrySelect.addEventListener('change', function() {
+  const maxLength = countryPhoneLengths[this.value] || 15;
+  phoneInput.maxLength = maxLength;
+  
+  // Trim existing value if it exceeds new max length
+  if (phoneInput.value.length > maxLength) {
+    phoneInput.value = phoneInput.value.substring(0, maxLength);
+  }
+});
+
+// Initialize with default country (213 - Algeria)
+const initialMaxLength = countryPhoneLengths[countrySelect.value] || 15;
+phoneInput.maxLength = initialMaxLength;
+</script>
+
 
