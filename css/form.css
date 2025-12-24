@@ -89,11 +89,23 @@ ol, ul {
 	background:rgba(237, 239, 244, 1);
 }
 .zf-templateWidth {
-	margin:0 auto;	
+	margin: 0 auto;	
 	padding: 30px 20px;
-	max-width: 800px;
-    width: 100%;
-    box-sizing: border-box;
+	max-width: 100%;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+@media (min-width: 600px) {
+	.zf-templateWidth {
+		max-width: 800px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.zf-templateWidth {
+		padding: 30px 40px;
+	}
 }
 .zf-templateWrapper {
 	background: #fff;
@@ -212,8 +224,14 @@ ol, ul {
 
 .zf-tempFrmWrapper {
 	padding: 16px 40px 16px 40px;
-    margin: 0;
-    box-sizing: border-box;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+	.zf-tempFrmWrapper {
+		padding: 12px 20px 12px 20px;
+	}
 }
 
 .zf-tempFrmWrapper .zf-tempContDiv {
@@ -1211,6 +1229,13 @@ width: 223px;
 	padding: 0 40px 0 40px;
 	margin: 0;
 	box-sizing: border-box;
+	width: 100%;
+}
+
+@media (max-width: 768px) {
+	.zfgrid_Wrapper {
+		padding: 0 20px 0 20px;
+	}
 }
 .zfgridLabelCont {
 	padding: 12px 0;
@@ -1228,21 +1253,42 @@ width: 223px;
 .zftwoColumn,
 .zfthreeColumn {
 	display: flex;
-  	flex-wrap: nowrap;
+  	flex-wrap: wrap;
 	gap: 32px;
+	justify-content: space-between;
 }
 .zfoneColumn .zfCol{
 	max-width: 100%;
+	width: 100%;
 }
 .zftwoColumn .zfCol {
-	flex: 1 1;
+	flex: 1 1 calc(50% - 16px);
   	overflow-x: hidden;
-	max-width: 50%;
+	min-width: 200px;
 }
 .zfthreeColumn .zfCol {
-	flex: 1 1;
+	flex: 1 1 calc(33.33% - 22px);
   	overflow-x: hidden;
-	max-width: 33%;
+	min-width: 150px;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 1024px) {
+	.zfthreeColumn .zfCol {
+		flex: 1 1 calc(50% - 16px);
+	}
+}
+
+@media (max-width: 768px) {
+	.zftwoColumn,
+	.zfthreeColumn {
+		gap: 16px;
+	}
+	.zftwoColumn .zfCol,
+	.zfthreeColumn .zfCol {
+		flex: 1 1 100%;
+		max-width: 100%;
+	}
 }
 .zfgrid_Wrapper .zf-tempFrmWrapper {
 	padding-left: 0;
