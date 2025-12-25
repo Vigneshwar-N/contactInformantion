@@ -160,7 +160,7 @@ ol, ul {
 .zf-errorMessageTerms {
 	font: 15px Arial, Helvetica, sans-serif;
     color: #f41033;
-    padding-top: 30px;
+    padding-top: 25px;
 }
 
 /**********Mandatory Message***********/	
@@ -1158,6 +1158,71 @@ ol, ul {
 	width: auto;
 }
 /* New Css */
+
+/* Attachment dashed box styling */
+.zf-file-input-wrapper {
+	position: relative;
+	border: 2px dashed #cfd3e8;
+	border-radius: 12px;
+	/* padding: 10px; */
+	padding-top: 24px;
+	padding-bottom: 24px;
+	background: #ffffff;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	box-sizing: border-box;
+}
+
+/* No hover style — keep border unchanged on hover */
+
+/* Remove focus ring change on attachment wrapper */
+/* Intentionally no visual change on focus-within */
+
+.zf-file-input {
+	position: absolute;
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	white-space: nowrap;
+	pointer-events: none;
+}
+
+.zf-file-label {
+	font-size: 13px;
+	color: #252c3e;
+	margin-left: 20px;
+}
+
+.zf-upload-icon {
+	width: 28px;
+	height: 28px;
+	color: #252c3e;
+	margin-right: 20px;
+	transition: color 0.2s ease;
+}
+
+.zf-upload-trigger {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 8px;
+	cursor: pointer;
+}
+
+/* Icon color changes on press (and keyboard focus) */
+.zf-upload-trigger:active .zf-upload-icon,
+.zf-upload-trigger:focus .zf-upload-icon {
+	color: #2eb79f;
+}
+
+.zf-upload-trigger.pressed .zf-upload-icon {
+	color: #2eb79f;
+}
+
 .zf-date .zf-tempContDiv input[type="text"]{
 	width: 340px;
 }

@@ -683,7 +683,15 @@
                                 Attachment
                             </label>
                             <div class="zf-tempContDiv">
-                                <input type="file" name="FileUpload" checktype="c1" />
+                                <div class="zf-file-input-wrapper">
+                                    <input type="file" id="FileUpload_input" name="FileUpload" checktype="c1" class="zf-file-input" />
+                                    <div class="zf-file-label">Choose File</div>
+                                    <label class="zf-upload-trigger" for="FileUpload_input" aria-label="Upload">
+                                        <svg class="zf-upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                            <path d="M3 16.5v.75A2.25 2.25 0 0 0 5.25 19.5h13.5A2.25 2.25 0 0 0 21 17.25v-.75M9 8.25l3-3m0 0l3 3m-3-3V15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </label>
+                                </div>
                                 <p id="FileUpload_error" class="zf-errorMessage" style="display: none;">
                                     Choose any file for this field.</p>
                             </div>
@@ -693,7 +701,15 @@
                                 Attachment
                             </label>
                             <div class="zf-tempContDiv">
-                                <input type="file" name="FileUpload1" checktype="c1" />
+                                <div class="zf-file-input-wrapper">
+                                    <input type="file" id="FileUpload1_input" name="FileUpload1" checktype="c1" class="zf-file-input" />
+                                    <div class="zf-file-label">Choose File</div>
+                                    <label class="zf-upload-trigger" for="FileUpload1_input" aria-label="Upload">
+                                        <svg class="zf-upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                            <path d="M3 16.5v.75A2.25 2.25 0 0 0 5.25 19.5h13.5A2.25 2.25 0 0 0 21 17.25v-.75M9 8.25l3-3m0 0l3 3m-3-3V15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </label>
+                                </div>
                                 <p id="FileUpload1_error" class="zf-errorMessage" style="display: none;">
                                     Choose any file for this field.</p>
                                 <p class="zf-instruction">You can upload maximum 2 files in any of following formats:
@@ -920,6 +936,36 @@ countrySelect.addEventListener('change', function() {
 // Initialize with default country (213 - Algeria)
 const initialMaxLength = countryPhoneLengths[countrySelect.value] || 15;
 phoneInput.maxLength = initialMaxLength;
+</script>
+
+
+<script>
+// Upload icon pressed color handling
+document.addEventListener('DOMContentLoaded', function() {
+    const triggers = document.querySelectorAll('.zf-upload-trigger');
+    triggers.forEach(function(trigger){
+        const inputId = trigger.getAttribute('for');
+        const fileInput = inputId ? document.getElementById(inputId) : null;
+
+        const addPressed = () => trigger.classList.add('pressed');
+        const removePressed = () => trigger.classList.remove('pressed');
+
+        // Keep teal after press; do not remove on mouseup/touchend
+        trigger.addEventListener('mousedown', addPressed);
+        trigger.addEventListener('touchstart', addPressed, {passive: true});
+
+        if (fileInput) {
+            // Remove teal once a file is chosen
+            fileInput.addEventListener('change', removePressed);
+            // If picker closes without selection, remove state on blur
+            fileInput.addEventListener('blur', function(){
+                if (!fileInput.files || fileInput.files.length === 0) {
+                    removePressed();
+                }
+            });
+        }
+    });
+});
 </script>
 
 
