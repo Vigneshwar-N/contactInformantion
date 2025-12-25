@@ -1159,6 +1159,14 @@ ol, ul {
 }
 /* New Css */
 
+/* Prefix icon spacing: ensure text starts right of icon */
+.zf-tempContDiv span svg + input[type="text"],
+.zf-tempContDiv span svg + input[type="email"],
+.zf-tempContDiv span svg + input[type="search"],
+.zf-tempContDiv span svg + input[type="password"] {
+	padding-left: 44px; /* 12px left + 18px icon + ~14px gap */
+}
+
 /* Attachment dashed box styling */
 .zf-file-input-wrapper {
 	position: relative;
